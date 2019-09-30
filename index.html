@@ -7,11 +7,46 @@
     <meta name="description" content="Simple Algorithm Visualizer">
     <meta name="keywords" content="Algorithm">
     <meta name="author" content="Carmine Choi">
+    <link href="https://fonts.googleapis.com/css?family=Montserrat&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="css/style.css"></link>
     <title>Maze Runner</title>
 </head>
 <body>
-    
+    <header>
+        <div class="container">
+            <div id="title">
+                <h1><span class="highlight">Maze</span> Runner</h1>
+            </div>
+            <div class="menu">
+                <div class="dropdown">
+                    <button onclick="dropAlgorithmBtn()" class="dropbtn">Algorithm <span class="transparent">&#x25BC;</span></button>
+                    <div id="algorithm-btn" class="dropdown-content">
+                        <a href="#">Dijktra's</a>
+                        <a href="#">Breadth-First Search</a>
+                        <a href="#">Depth-First Search</a>
+                        <a href="#">Swarm</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button onclick="dropMazeBtn()" class="dropbtn">Maze <span class="transparent">&#x25BC;</span></button>
+                    <div id="maze-btn" class="dropdown-content">
+                        <a href="#">Maze 1</a>
+                        <a href="#">Maze 2</a>
+                        <a href="#">Maze 3</a>
+                        <a href="#">Maze 4</a>
+                    </div>
+                </div>
+                <div class="dropdown">
+                    <button onclick="dropMazeBtn()" class="dropbtn">Clear Path</button>
+                </div>
+                <div class="dropdown">
+                    <button onclick="dropMazeBtn()" class="dropbtn">Clear Board</button>
+                </div>
+            </div>
+
+            
+        </div>
+    </header>
     
     <script src="js/main.js"></script>
 </body>

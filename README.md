@@ -1,3 +1,3 @@
 # SearchAlgorithmVisualizer
 
-https://carminechoi.github.io/Maze-Runner/
+https://carminechoi.github.io/Pathfinder/

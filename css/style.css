@@ -3,7 +3,8 @@
     --primary-color: #264653;
     --secondary-color: #2A9D8F;
     --text-color: #f4f4f4;
-    --table-color: #9ddff5;
+	--table-color: #f4f4f4;
+	--cell-empty-color: #F8F8F8;
 }
 
 * {
@@ -123,17 +124,19 @@ header .transparent {
     display:block;
 }
 
-/* TABLE */
+/************** TABLE **************/
+
 #board {
 	margin-left: auto;
 	margin-right: auto;
-	padding: 5px;
+	margin-top: 25px;
+	padding: 1px;
 	font-size: 4em;
 	font-family: Sans;
 	color: #444;
-	background: #F8F8F8;
-	width: 310px;
-	height: 300px;
+	background: var(--cell-empty-color);
+	width: 1000px;
+	height: 1000px;
 	text-align: center;
 	vertical-align: center;
 	border: 1px solid #CECECE;
@@ -143,8 +146,13 @@ header .transparent {
 
 #board td {
 	border-collapse:collapse;
-	border-left: 5px solid #CCC;
-	border-bottom: 5px solid #CCC;
+	border-left: 2px solid #CCC;
+	border-bottom: 2px solid #CCC;
+	
+	cursor: pointer;
+	height: 30px;
+	width: 30px;
+	
 }
 
 #board td:first-child {
@@ -156,11 +164,7 @@ header .transparent {
 }
 
 /*Cells*/
-#board td {
-	cursor: pointer;
-	height: 95px;
-	width: 95px;
-}
+
 
 #board td:hover {
 	background: #ECECEC;

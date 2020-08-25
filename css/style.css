@@ -124,20 +124,27 @@ header .transparent {
 }
 
 /* TABLE */
-.path {
-    text-align: center;
-    width: 90vw;
-    height: 75vh;
+#board td {
+	border-collapse:collapse;
+	border-left: 5px solid #CCC;
+	border-bottom: 5px solid #CCC;
 }
 
-.path div {
-    width: 100%;
-    height: calc(75vh/64);
+#board td:first-child {
+	border-left: none;
 }
 
-.path div div{
-    width: calc(90vw/64);
-    height: 100%;
-    outline: 1px solid var(--table-color);
-    float: left;
+#board tr:last-child td {
+	border-bottom: none;
+}
+
+/*Cells*/
+#board td {
+	cursor: pointer;
+	height: 95px;
+	width: 95px;
+}
+
+#board td:hover {
+	background: #ECECEC;
 }

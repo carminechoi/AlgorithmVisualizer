@@ -1,9 +1,9 @@
-@import url('https://fonts.googleapis.com/css?family=Roboto');
 
 :root {
     --primary-color: #264653;
     --secondary-color: #2A9D8F;
     --text-color: #f4f4f4;
+    --table-color: #9ddff5;
 }
 
 * {
@@ -15,7 +15,7 @@
 body {
     font-family: 'Montserrat', 'sans-serif';
     line-height: 1.6;
-    background: #fff;
+    background: var(--table-color);
     color: #333;
 }
 
@@ -123,3 +123,21 @@ header .transparent {
     display:block;
 }
 
+/* TABLE */
+.path {
+    text-align: center;
+    width: 90vw;
+    height: 75vh;
+}
+
+.path div {
+    width: 100%;
+    height: calc(75vh/64);
+}
+
+.path div div{
+    width: calc(90vw/64);
+    height: 100%;
+    outline: 1px solid var(--table-color);
+    float: left;
+}

@@ -1,3 +1,19 @@
+var selected = 0;
+var isDragging = false;
+
+/* Initialize Board */
+var board = new Array(32);
+for (var i = 0; i < board.length; i++) {
+		board[i] = [];
+}
+for(var i = 0; i < board.length; i++) {
+	for(var j = 0; j < board.length; j++) {
+		board[i][j] = 0;
+	}
+}
+
+/************** ___START Mouse Input Functions___ **************/
+
 $(function () {
 	$("#board td")
 		.mousedown(rangeMouseDown)
@@ -5,19 +21,13 @@ $(function () {
 		.mousemove(rangeMouseMove);
 });
 
-var dragStart = 0;
-var dragEnd = 0;
-var isDragging = false;
-var selected = [];
- 
 function rangeMouseDown(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
 		var allCells = $("#board td");
-		dragStart = allCells.index($(this));
+		selected = allCells.index($(this));
 		isDragging = true;
-		selected.push(dragStart);
 		if (typeof e.preventDefault != 'undefined') { e.preventDefault(); } 
 		document.documentElement.onselectstart = function () { return false; };
 		selectRange();
@@ -28,14 +38,7 @@ function rangeMouseUp(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
-		var allCells = $("#board td");
-		dragStart = allCells.index($(this));
-
 		isDragging = false;
-		if (dragStart != 0) {
-			selectRange();
-		}
-
 		document.documentElement.onselectstart = function () { return true; }; 
 	}
 }
@@ -43,21 +46,14 @@ function rangeMouseUp(e) {
 function rangeMouseMove(e) {
 	if (isDragging) {
 		var allCells = $("#board td");
-		if (dragStart !== allCells.index($(this))) {
-			dragStart = allCells.index($(this));
-			selected.push(dragStart);
-			selectRange();
-		}
-		
+		selected = allCells.index($(this));
+		selectRange();		
 	}            
 }
 
 function selectRange() {
-	//$("#board td").removeClass('selected');
-	var i;
-	
-	$("#board td").slice(dragStart, dragStart + 1).addClass('selected');
-	//console.log("index: " + selected);
+	var coord = indexToCoord(selected)
+	$(coord).addClass('selected');
 }
 
 function isRightClick(e) {
@@ -68,74 +64,20 @@ function isRightClick(e) {
 	}
 	return false;
 }
+/************** ___END Mouse Input Functions___ **************/
 
+function indexToCoord(index) {
+	var x = Math.floor(index / 32);
+	var y = index % 32;
+	console.log("x:  " + x + "     y: " + y + "     index: " + index);
+	var result = "#".concat(x.toString(10), "-", y.toString(10));
+	console.log("result: "+ result)
+	return result;
+}
 
-// class Cell {
-// 	constructor(isClicked){
-// 		this.isClicked = isClicked;
-// 	}
-// }
-
-// var colorArray = ['#F8F8F8', '#2A9D8F'];
-// var tds = document.getElementsByTagName('td');
-// var firstColor = '#F8F8F8';
-// var isClicked = false;
-
-// /* Creating 32 x 32 board */ 
-// var board = new Array(32);
-// for (var i = 0; i < board.length; i++) {
-// 	board[i] = [];
-// }
-
-// /* Initializing 2d array */
-// for(var i = 0; i < board.length; i++) {
-// 	for(var j = 0; j < board.length; j++) {
-// 		board[i][j] = new Cell(false);
-// 	}
-// }
-
-// function getCoord(id) {
-// 	var coord = id.split("-");
-// 	return coord;
-// }
-
-// function changeColor(cell, num, x, y) {
-// 	cell.style.backgroundColor = colorArray[num];
-// 	board[x][y].isClicked = true
-// }
-
-// /* Acknowledge when click is released */
-// var handleCellUp = function() {
-// 	isClicked = false;
-// }
-
-// /* When cell is held down */
-// var handleCellEnter = function() {
-// 	var cell = this;
-// 	if (isClicked) {
-// 		fillSquare(cell)
-// 	}
-// };
-
-// /* When cell is clicked */
-// var handleCellDown = function() {
-// 	var cell = this;
-// 	isClicked = true;
-// 	fillSquare(cell);
-// };
-
-// function fillSquare(cell) {
-// 	var coord = getCoord(cell.id);
-
-// 	changeColor(cell, 1, coord[0], coord[1]);
-// 	console.log("x: " + coord[0] + "   y: " + coord[1]);
-// }
-
-// for(var i = 0; i < tds.length; i++) {
-// 	tds[i].onmousedown = handleCellDown;
-// 	tds[i].onmouseenter = handleCellEnter;
-// 	tds[i].onmouseup = handleCellUp;
-// };
+function clearBoard() {
+	$("#board td").removeClass('selected');
+}
 
 window.onclick = function(event) {
     if (!event.target.matches('.dropbtn')) {

@@ -126,32 +126,35 @@ header .transparent {
 
 /************** TABLE **************/
 
+#table { border:1px solid #ccc; }
+#table td { padding:50px; }
+#table td.selected { background-color:#ccc; }
+
 #board {
 	margin-left: auto;
 	margin-right: auto;
 	margin-top: 25px;
 	padding: 1px;
-	font-size: 4em;
-	font-family: Sans;
+	
 	color: #444;
 	background: var(--cell-empty-color);
+
 	width: 1000px;
 	height: 1000px;
-	text-align: center;
-	vertical-align: center;
-	border: 1px solid #CECECE;
+
+	border: 2px solid #CECECE;
 	border-radius: 5px;
-	box-shadow: 1px 1px 1px #CCC;
+	border-collapse: collapse;
 }
 
+
 #board td {
-	border-collapse:collapse;
 	border-left: 2px solid #CCC;
 	border-bottom: 2px solid #CCC;
-	
+
 	cursor: pointer;
-	height: 30px;
-	width: 30px;
+	/* height: 30px;
+	width: 30px; */
 	
 }
 
@@ -164,8 +167,12 @@ header .transparent {
 }
 
 /*Cells*/
-
+#board td { padding:15px; }
 
 #board td:hover {
 	background: #ECECEC;
+}
+
+#board td.selected {
+	background-color: var(--secondary-color);
 }

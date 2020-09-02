@@ -6,8 +6,8 @@ var isDragging = false;
 var cellStatus = 0;
 
 /* Initialize Board */
-var board = new Array(32);
-for (var i = 0; i < board.length; i++) {
+var board = new Array(25);
+for (var i = 0; i < 40; i++) {
 		board[i] = [];
 }
 for(var i = 0; i < board.length; i++) {
@@ -17,8 +17,8 @@ for(var i = 0; i < board.length; i++) {
 }
 
 /* Add Start and End Positions */
-var start = "#15-5";
-var end = "#15-25";
+var start = "#11-8";
+var end = "#11-31";
 $(start).addClass('start');
 $(end).addClass('end');
 
@@ -75,7 +75,6 @@ $("#board td")
 });
 
 function selectRange(cellStatus, coord) {
-	console.log(coord);
 	if (cellStatus == 1) {
 		$(coord).addClass('selected');
 		board[x][y] = 1;
@@ -93,6 +92,7 @@ function selectRange(cellStatus, coord) {
 		board[x][y] = 0;
 		$(coord).removeClass('selected');
 	}
+	console.log(coord);
 }
 
 function isRightClick(e) {
@@ -108,8 +108,8 @@ function isRightClick(e) {
 
 // Change Board Status and Return String Result
 function indexToCoord(index) {
-	x = Math.floor(index / 32);
-	y = index % 32;
+	x = Math.floor(index / 40);
+	y = index % 40;
 	
 	var result = "#".concat(x.toString(10), "-", y.toString(10));
 

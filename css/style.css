@@ -134,8 +134,8 @@ header .transparent {
 	color: #444;
 	background: var(--cell-empty-color);
 
-	width: 1000px;
-	height: 1000px;
+	width: 700px;
+	height: 700px;
 
 	border: 2px solid #CECECE;
 	border-radius: 5px;
@@ -162,7 +162,7 @@ header .transparent {
 
 /*Cells*/
 #board td {
-	padding:15px
+	padding:13px
 }
 
 #board td:hover {

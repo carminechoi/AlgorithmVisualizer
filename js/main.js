@@ -1,5 +1,9 @@
 var selected = 0;
+var cood = "";
+var x = 0;
+var y = 0;
 var isDragging = false;
+var cellStatus = 0;
 
 /* Initialize Board */
 var board = new Array(32);
@@ -12,48 +16,83 @@ for(var i = 0; i < board.length; i++) {
 	}
 }
 
+/* Add Start and End Positions */
+var start = "#15-5";
+var end = "#15-25";
+$(start).addClass('start');
+$(end).addClass('end');
+
+
 /************** ___START Mouse Input Functions___ **************/
 
-$(function () {
-	$("#board td")
-		.mousedown(rangeMouseDown)
-		.mouseup(rangeMouseUp)
-		.mousemove(rangeMouseMove);
-});
-
-function rangeMouseDown(e) {
+$("#board td")
+.mousedown(function rangeMouseDown(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
+		isDragging = true;
+
 		var allCells = $("#board td");
 		selected = allCells.index($(this));
-		isDragging = true;
+		coord = indexToCoord(selected)
+
+		if ($(coord).hasClass('selected')) {
+			cellStatus = 0;
+		} else if ($(coord).hasClass('start')){
+			cellStatus = 2;
+		} else if ($(coord).hasClass('end')) {
+			cellStatus = 3;
+		} else {
+			cellStatus = 1;
+		}
+
 		if (typeof e.preventDefault != 'undefined') { e.preventDefault(); } 
 		document.documentElement.onselectstart = function () { return false; };
-		selectRange();
+		
+		selectRange(cellStatus, coord);
 	} 
-}
+});
 
-function rangeMouseUp(e) {
+$("#board td")
+.mouseup(function rangeMouseUp(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
 		isDragging = false;
 		document.documentElement.onselectstart = function () { return true; }; 
 	}
-}
+});
 
-function rangeMouseMove(e) {
+$("#board td")
+.mousemove(function rangeMouseMove() {
 	if (isDragging) {
 		var allCells = $("#board td");
 		selected = allCells.index($(this));
-		selectRange();		
-	}            
-}
+		coord = indexToCoord(selected)
 
-function selectRange() {
-	var coord = indexToCoord(selected)
-	$(coord).addClass('selected');
+		selectRange(cellStatus, coord);		
+	}            
+});
+
+function selectRange(cellStatus, coord) {
+	console.log(coord);
+	if (cellStatus == 1) {
+		$(coord).addClass('selected');
+		board[x][y] = 1;
+	} else if (cellStatus == 2) {
+		board[x][y] = 2;
+		$("#board td").removeClass('start');
+		$(coord).removeClass('selected');
+		$(coord).addClass('start');
+	} else if (cellStatus == 3) {
+		board[x][y] = 3;
+		$("#board td").removeClass('end');
+		$(coord).removeClass('selected');
+		$(coord).addClass('end');
+	} else {
+		board[x][y] = 0;
+		$(coord).removeClass('selected');
+	}
 }
 
 function isRightClick(e) {
@@ -66,12 +105,14 @@ function isRightClick(e) {
 }
 /************** ___END Mouse Input Functions___ **************/
 
+
+// Change Board Status and Return String Result
 function indexToCoord(index) {
-	var x = Math.floor(index / 32);
-	var y = index % 32;
-	console.log("x:  " + x + "     y: " + y + "     index: " + index);
+	x = Math.floor(index / 32);
+	y = index % 32;
+	
 	var result = "#".concat(x.toString(10), "-", y.toString(10));
-	console.log("result: "+ result)
+
 	return result;
 }
 
@@ -79,15 +120,15 @@ function clearBoard() {
 	$("#board td").removeClass('selected');
 }
 
-window.onclick = function(event) {
-    if (!event.target.matches('.dropbtn')) {
-        var dropdowns = document.getElementsByClassName("dropdown-content");
-        var i;
-        for (i = 0; i < dropdowns.length; i++) {
-            var openDropdown = dropdowns[i];
-            if (openDropdown.classList.contains('show')) {
-                openDropdown.classList.remove('show');
-            }
-        }
-	}    
-}
+// window.onclick = function(event) {
+//     if (!event.target.matches('.dropbtn')) {
+//         var dropdowns = document.getElementsByClassName("dropdown-content");
+//         var i;
+//         for (i = 0; i < dropdowns.length; i++) {
+//             var openDropdown = dropdowns[i];
+//             if (openDropdown.classList.contains('show')) {
+//                 openDropdown.classList.remove('show');
+//             }
+//         }
+// 	}    
+// }

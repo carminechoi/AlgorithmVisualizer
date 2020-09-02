@@ -125,11 +125,6 @@ header .transparent {
 }
 
 /************** TABLE **************/
-
-#table { border:1px solid #ccc; }
-#table td { padding:50px; }
-#table td.selected { background-color:#ccc; }
-
 #board {
 	margin-left: auto;
 	margin-right: auto;
@@ -144,7 +139,6 @@ header .transparent {
 
 	border: 2px solid #CECECE;
 	border-radius: 5px;
-	border-collapse: collapse;
 }
 
 
@@ -167,7 +161,9 @@ header .transparent {
 }
 
 /*Cells*/
-#board td { padding:15px; }
+#board td {
+	padding:15px
+}
 
 #board td:hover {
 	background: #ECECEC;
@@ -175,4 +171,12 @@ header .transparent {
 
 #board td.selected {
 	background-color: var(--secondary-color);
+}
+
+#board td.start {
+	background-color: purple;
+}
+
+#board td.end {
+	background-color: red;
 }

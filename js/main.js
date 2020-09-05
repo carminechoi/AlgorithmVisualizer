@@ -1,17 +1,21 @@
-var selected = 0;
-var cood = "";
 var x = 0;
 var y = 0;
+var specialX = 0;
+var specialY = 0;
+
 var isDragging = false;
+var isStart = false;
+var isEnd = false;
 var cellStatus = 0;
+var allCells = $("#board td");
 
 /* Initialize Board */
 var board = new Array(25);
 for (var i = 0; i < 40; i++) {
-		board[i] = [];
+	board[i] = [];
 }
-for(var i = 0; i < board.length; i++) {
-	for(var j = 0; j < board.length; j++) {
+for (var i = 0; i < board.length; i++) {
+	for (var j = 0; j < board.length; j++) {
 		board[i][j] = 0;
 	}
 }
@@ -19,105 +23,134 @@ for(var i = 0; i < board.length; i++) {
 /* Add Start and End Positions */
 var start = "#11-8";
 var end = "#11-31";
-$(start).addClass('start');
-$(end).addClass('end');
-
+board[11][8] = 2;
+board[11][31] = 3;
+$(start).addClass("start");
+$(end).addClass("end");
 
 /************** ___START Mouse Input Functions___ **************/
 
-$("#board td")
-.mousedown(function rangeMouseDown(e) {
+$("#board td").mousedown(function rangeMouseDown(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
 		isDragging = true;
+		var selected = allCells.index($(this));
+		var coord = indexToCoord(selected);
+		checkIsSpecial();
+		cellStatus = checkCellStatus(coord);
 
-		var allCells = $("#board td");
-		selected = allCells.index($(this));
-		coord = indexToCoord(selected)
-
-		if ($(coord).hasClass('selected')) {
-			cellStatus = 0;
-		} else if ($(coord).hasClass('start')){
-			cellStatus = 2;
-		} else if ($(coord).hasClass('end')) {
-			cellStatus = 3;
-		} else {
-			cellStatus = 1;
+		if (typeof e.preventDefault != "undefined") {
+			e.preventDefault();
 		}
+		document.documentElement.onselectstart = function () {
+			return false;
+		};
 
-		if (typeof e.preventDefault != 'undefined') { e.preventDefault(); } 
-		document.documentElement.onselectstart = function () { return false; };
-		
 		selectRange(cellStatus, coord);
-	} 
+		console.log("DOWN - isStart: " + isStart);
+		console.log("DOWN - isEnd  : " + isEnd);
+		console.log("DOWN - status : " + cellStatus);
+	}
 });
 
-$("#board td")
-.mouseup(function rangeMouseUp(e) {
+$("#board td").mousemove(function rangeMouseMove() {
+	if (isDragging) {
+		var selected = allCells.index($(this));
+		var coord = indexToCoord(selected);
+		var tempStatus = checkCellStatus(coord);
+		if (tempStatus == 0 || tempStatus == 1) {
+			selectRange(cellStatus, coord);
+		}
+	}
+});
+
+$("#board td").mouseup(function rangeMouseUp(e) {
 	if (isRightClick(e)) {
 		return false;
 	} else {
 		isDragging = false;
-		document.documentElement.onselectstart = function () { return true; }; 
+		if (isStart) {
+			board[specialX][specialY] = 0;
+			board[x][y] = 2;
+			isStart = false;
+		} else if (isEnd) {
+			board[specialX][specialY] = 0;
+			board[x][y] = 3;
+			isEnd = false;
+		}
+		document.documentElement.onselectstart = function () {
+			return true;
+		};
+		console.log("UP - isStart: " + isStart);
+		console.log("UP - isEnd  : " + isEnd);
+		console.log(board);
 	}
-});
-
-$("#board td")
-.mousemove(function rangeMouseMove() {
-	if (isDragging) {
-		var allCells = $("#board td");
-		selected = allCells.index($(this));
-		coord = indexToCoord(selected)
-
-		selectRange(cellStatus, coord);		
-	}            
 });
 
 function selectRange(cellStatus, coord) {
-	if (cellStatus == 1) {
-		$(coord).addClass('selected');
+	if (cellStatus == 0) {
+		$(coord).addClass("selected");
 		board[x][y] = 1;
-	} else if (cellStatus == 2) {
-		board[x][y] = 2;
-		$("#board td").removeClass('start');
-		$(coord).removeClass('selected');
-		$(coord).addClass('start');
-	} else if (cellStatus == 3) {
-		board[x][y] = 3;
-		$("#board td").removeClass('end');
-		$(coord).removeClass('selected');
-		$(coord).addClass('end');
-	} else {
+	} else if (cellStatus == 1) {
 		board[x][y] = 0;
-		$(coord).removeClass('selected');
+		$(coord).removeClass("selected");
+	} else if (cellStatus == 2) {
+		$("#board td").removeClass("start");
+		$(coord).addClass("start");
+	} else if (cellStatus == 3) {
+		$("#board td").removeClass("end");
+		$(coord).addClass("end");
 	}
-	console.log(coord);
 }
 
 function isRightClick(e) {
 	if (e.which) {
-		return (e.which == 3);
+		return e.which == 3;
 	} else if (e.button) {
-		return (e.button == 2);
+		return e.button == 2;
 	}
 	return false;
 }
 /************** ___END Mouse Input Functions___ **************/
 
-
-// Change Board Status and Return String Result
+/********* ___START Mouse Input HELPER Functions___  *********/
 function indexToCoord(index) {
 	x = Math.floor(index / 40);
 	y = index % 40;
-	
+
 	var result = "#".concat(x.toString(10), "-", y.toString(10));
 
 	return result;
 }
 
+function checkCellStatus(coord) {
+	if ($(coord).hasClass("selected")) {
+		return 1;
+	} else if ($(coord).hasClass("start")) {
+		return 2;
+	} else if ($(coord).hasClass("end")) {
+		return 3;
+	} else {
+		return 0;
+	}
+}
+
+function checkIsSpecial() {
+	if (board[x][y] == 2) {
+		isStart = true;
+		specialX = x;
+		specialY = y;
+	} else if (board[x][y] == 3) {
+		isEnd = true;
+		specialX = x;
+		specialY = y;
+	}
+}
+/*********** ___END Mouse Input HELPER Functions___ **********/
+
 function clearBoard() {
-	$("#board td").removeClass('selected');
+	$("#board td").removeClass("selected");
 }
 
 // window.onclick = function(event) {
@@ -130,5 +163,5 @@ function clearBoard() {
 //                 openDropdown.classList.remove('show');
 //             }
 //         }
-// 	}    
+// 	}
 // }

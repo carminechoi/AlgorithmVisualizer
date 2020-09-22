@@ -19,16 +19,16 @@
             </div>
             <div class="menu">
                 <div class="dropdown">
-                    <button onclick="dropAlgorithmBtn()" class="dropbtn">Algorithm <span class="transparent">&#x25BC;</span></button>
+                    <button class="dropbtn" onclick="toggleAlgorithmBtn()">Algorithm <span class="transparent">&#x25BC;</span></button>
                     <div id="algorithm-btn" class="dropdown-content">
-                        <a href="#">Dijktra's</a>
-                        <a href="#">Breadth-First Search</a>
+                        <a href="#" onclick="doDijkstra()">Dijkstra's</a>
+                        <a href="#" onclick="doBFS(Board.board, Board.startX, Board.startY, 3)">Breadth-First Search</a>
                         <a href="#">Depth-First Search</a>
                         <a href="#">Swarm</a>
                     </div>
                 </div>
                 <div class="dropdown">
-                    <button onclick="dropMazeBtn()" class="dropbtn">Maze <span class="transparent">&#x25BC;</span></button>
+                    <button onclick="toggleMazeBtn()" class="dropbtn">Maze <span class="transparent">&#x25BC;</span></button>
                     <div id="maze-btn" class="dropdown-content">
                         <a href="#">Maze 1</a>
                         <a href="#">Maze 2</a>
@@ -77,6 +77,8 @@
 		</tbody>
 	</table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="js/main.js"></script>
+	<script src="js/main.js"></script>
+	<script src="js/algorithm.js"></script>
+	<script src="js/mouseInput.js"></script>
 </body>
 </html>

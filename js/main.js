@@ -2,15 +2,20 @@ const ROWS = 25;
 const COLS = 40;
 const allCells = $("#board td");
 
+const SX = 11;
+const SY = 8;
+const EX = 11;
+const EY = 15;
+
 var Board = {
 	board: createBoard(),
 	x: 0,
 	y: 0,
-	startX: 11,
-	startY: 8,
+	startX: SX,
+	startY: SY,
 	specialPrev: 0,
-	endX: 11,
-	endY: 31,
+	endX: EX,
+	endY: EY,
 	isStart: false,
 	isEnd: false,
 	isSelected: false,
@@ -25,114 +30,48 @@ function createBoard() {
 	}
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
-			board[i][j] = 0;
+			board[i][j] = {
+				value: 0,
+				distance: 0,
+				predecessor: null,
+				x: i,
+				y: j,
+			};
 		}
 	}
+	board[SX][SY].value = 2;
+	board[EX][EY].value = 3;
+
 	return board;
 }
-/* Add Start and End Positions */
-var start = "#11-8";
-var end = "#11-31";
-Board.board[11][8] = 2;
-Board.board[11][31] = 3;
-$(start).addClass("start");
-$(end).addClass("end");
 
-/************** ___START Mouse Input Functions___ **************/
-
-$("#board td").mousedown(function rangeMouseDown(e) {
-	if (isRightClick(e)) {
-		return false;
-	} else {
-		Board.isDragging = true;
-		var cell = this;
-		indexToCoord(cell);
-		checkCellStatus();
-		updateBoard();
-		drawTable();
-
-		if (typeof e.preventDefault != "undefined") {
-			e.preventDefault();
-		}
-		document.documentElement.onselectstart = function () {
-			return false;
-		};
-	}
-});
-
-$("#board td").mousemove(function rangeMouseMove() {
-	if (Board.isDragging) {
-		var cell = this;
-		indexToCoord(cell);
-		//checkCellStatus();
-		if (Board.isEnd == false && Board.isStart == false) {
-			updateBoard();
-			drawTable();
-		} else {
-			updateBoard();
-			drawTable();
-		}
-	}
-});
-
-$("#board td").mouseup(function rangeMouseUp(e) {
-	if (isRightClick(e)) {
-		return false;
-	} else {
-		Board.isDragging = false;
-		document.documentElement.onselectstart = function () {
-			return true;
-		};
-		resetBoard();
-		console.table(Board.board);
-	}
-});
-
-function selectRange(cellStatus, coord) {
+function onLoad() {
 	drawTable();
-	if (cellStatus == 0) {
-		$(coord).addClass("selected");
-	} else if (cellStatus == 1) {
-		$(coord).removeClass("selected");
-	} else if (cellStatus == 2) {
-		$("#board td").removeClass("start");
-		$(coord).addClass("start");
-	} else if (cellStatus == 3) {
-		$("#board td").removeClass("end");
-		$(coord).addClass("start");
-	}
 }
 
-function isRightClick(e) {
-	if (e.which) {
-		return e.which == 3;
-	} else if (e.button) {
-		return e.button == 2;
-	}
-	return false;
-}
-
+/************** ___START Table Input Functions___ **************/
 function updateBoard() {
 	if (
 		Board.isSelected == false &&
 		Board.isStart == false &&
-		Board.isEnd == false
+		Board.isEnd == false &&
+		Board.board[Board.x][Board.y].value == 0
 	) {
-		Board.board[Board.x][Board.y] = 1;
-	} else if (Board.isSelected) {
-		Board.board[Board.x][Board.y] = 0;
+		Board.board[Board.x][Board.y].value = 1;
+	} else if (Board.isSelected && Board.board[Board.x][Board.y].value == 1) {
+		Board.board[Board.x][Board.y].value = 0;
 	} else if (Board.isStart) {
-		Board.board[Board.startX][Board.startY] = Board.specialPrev;
-		Board.specialPrev = Board.board[Board.x][Board.y];
+		Board.board[Board.startX][Board.startY].value = Board.specialPrev;
+		Board.specialPrev = Board.board[Board.x][Board.y].value;
 		Board.startX = Board.x;
 		Board.startY = Board.y;
-		Board.board[Board.x][Board.y] = 2;
+		Board.board[Board.x][Board.y].value = 2;
 	} else if (Board.isEnd) {
-		Board.board[Board.endX][Board.endY] = Board.specialPrev;
-		Board.specialPrev = Board.board[Board.x][Board.y];
+		Board.board[Board.endX][Board.endY].value = Board.specialPrev;
+		Board.specialPrev = Board.board[Board.x][Board.y].value;
 		Board.endX = Board.x;
 		Board.endY = Board.y;
-		Board.board[Board.x][Board.y] = 3;
+		Board.board[Board.x][Board.y].value = 3;
 	}
 }
 
@@ -140,25 +79,27 @@ function drawTable() {
 	$("#board td").removeClass("selected");
 	$("#board td").removeClass("start");
 	$("#board td").removeClass("end");
-
 	var row, col;
 	for (row = 0; row < ROWS; row++) {
 		for (col = 0; col < COLS; col++) {
 			var coordString = convertCoordToString(row, col);
-			if (Board.board[row][col] == 1) {
+			if (Board.board[row][col].value == 1) {
 				$(coordString).addClass("selected");
-			} else if (Board.board[row][col] == 2) {
+			} else if (Board.board[row][col].value == 2) {
 				$(coordString).addClass("start");
-			} else if (Board.board[row][col] == 3) {
+			} else if (Board.board[row][col].value == 3) {
 				$(coordString).addClass("end");
 			}
 		}
 	}
 }
 
-/************** ___END Mouse Input Functions___ **************/
+function drawSearched(coordString) {
+	$(coordString).addClass("searched");
+}
+/************** ___END Table Input Functions___ **************/
 
-/********* ___START Mouse Input HELPER Functions___  *********/
+/********* ___START Table Input HELPER Functions___  *********/
 function indexToCoord(cell) {
 	var selected = allCells.index($(cell));
 
@@ -175,41 +116,31 @@ function checkCellStatus() {
 	var x = Board.x;
 	var y = Board.y;
 
-	if (Board.board[x][y] == 0) {
+	if (Board.board[x][y].value == 0) {
 		Board.isSelected = false;
-	} else if (Board.board[x][y] == 1) {
+	} else if (Board.board[x][y].value == 1) {
 		Board.isSelected = true;
-	} else if (Board.board[x][y] == 2) {
+	} else if (Board.board[x][y].value == 2) {
 		Board.isStart = true;
-	} else if (Board.board[x][y] == 3) {
+	} else if (Board.board[x][y].value == 3) {
 		Board.isEnd = true;
 	}
-	console.log("isSelected: " + Board.isSelected);
-	console.log("isStart: " + Board.isStart);
-	console.log("isEnd: " + Board.isEnd);
 }
 
-function resetBoard() {
+function resetBoard(resetAll) {
 	Board.isStart = false;
 	Board.isEnd = false;
 	Board.isSelected = false;
+	Board.specialPrev = 0;
+	if (resetAll) {
+		Board.board = createBoard();
+		Board.startX = SX;
+		Board.startY = SY;
+		Board.endX = EX;
+		Board.endY = EY;
+	}
 }
 
-/*********** ___END Mouse Input HELPER Functions___ **********/
+/*********** ___END Table Input HELPER Functions___ **********/
 
-function clearBoard() {
-	$("#board td").removeClass("selected");
-}
-
-// window.onclick = function(event) {
-//     if (!event.target.matches('.dropbtn')) {
-//         var dropdowns = document.getElementsByClassName("dropdown-content");
-//         var i;
-//         for (i = 0; i < dropdowns.length; i++) {
-//             var openDropdown = dropdowns[i];
-//             if (openDropdown.classList.contains('show')) {
-//                 openDropdown.classList.remove('show');
-//             }
-//         }
-// 	}
-// }
+window.onload = onLoad;

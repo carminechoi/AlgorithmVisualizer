@@ -49,7 +49,10 @@ function doBFS(board, startX, startY, searchValue) {
 			}
 			var coordString = convertCoordToString(current.x + x, current.y + y);
 			var v = (current.x + x) * ROWS + (current.y + y);
-			if (bfsInfo[v].distance === null) {
+			if (
+				bfsInfo[v].distance === null &&
+				board[current.x + x][current.y + y].value != 1
+			) {
 				if (board[current.x + x][current.y + y].value === 3) {
 					console.log("FOUND *******************");
 					return bfsInfo;

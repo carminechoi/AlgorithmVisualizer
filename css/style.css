@@ -1,6 +1,6 @@
 :root {
 	--primary-color: #264653;
-	--secondary-color: #2a9d8f;
+	--secondary-color: #96ceb4;
 	--text-color: #f4f4f4;
 	--table-color: #f4f4f4;
 	--cell-empty-color: #f8f8f8;
@@ -164,17 +164,21 @@ header .transparent {
 }
 
 #board td.selected {
-	background-color: var(--secondary-color);
+	background-color: #355c7d;
 }
 
 #board td.start {
-	background-color: purple;
+	background-color: #93a0d6;
 }
 
 #board td.end {
-	background-color: red;
+	background-color: #ff9aa2;
 }
 
 #board td.searched {
-	background-color: var(--primary-color);
+	background-color: #96ceb4;
+}
+
+#board td.path {
+	background-color: #ffdee1;
 }

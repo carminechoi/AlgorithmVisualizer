@@ -97,6 +97,12 @@ function drawTable() {
 function drawSearched(coordString) {
 	$(coordString).addClass("searched");
 }
+
+function drawPath(coordString) {
+	$(coordString).removeClass("searched");
+
+	$(coordString).addClass("path");
+}
 /************** ___END Table Input Functions___ **************/
 
 /********* ___START Table Input HELPER Functions___  *********/

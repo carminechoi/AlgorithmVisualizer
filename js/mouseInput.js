@@ -89,6 +89,11 @@ function clearBoard() {
 	resetBoard(true);
 	drawTable();
 }
+
+function clearPath() {
+	$("#board td").removeClass("searched");
+	drawTable();
+}
 /********** ___END Menu Input HELPER Functions___ ***********/
 
 window.onclick = function (event) {

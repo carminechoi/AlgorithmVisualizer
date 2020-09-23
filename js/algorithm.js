@@ -14,120 +14,79 @@ Queue.prototype.isEmpty = function () {
 function doDijkstra() {}
 
 function doBFS(board, startX, startY, searchValue) {
-	var bfsInfo = [];
-
-	for (var i = 0; i < ROWS * COLS; i++) {
-		bfsInfo[i] = {
-			distance: null,
-			predecessor: null,
-		};
-	}
-
-	bfsInfo[startX * ROWS + startY].distance = 0;
+	clearPath();
 	var queue = new Queue();
 	queue.enqueue(board[startX][startY]);
-	console.log(board[12][16]);
-	(function doSort() {
+	var bfsInfo = [];
+
+	for (var i = 0; i < COLS * COLS; i++) {
+		if (i == startX * COLS + startY) {
+			bfsInfo[i] = {
+				distance: 0,
+				x: startX,
+				y: startY,
+			};
+		} else {
+			bfsInfo[i] = {
+				distance: null,
+				x: null,
+				y: null,
+			};
+		}
+	}
+
+	(function doBFSSort() {
 		var current = queue.dequeue();
-		console.log(current.x);
-		var u = current.x * ROWS + current.y;
+		var u = current.x * COLS + current.y;
 
 		for (var counter = 0; counter <= 4; counter++) {
 			var x, y;
 			if (counter === 0) {
-				x = -1;
-				y = 0;
+				x = current.x - 1;
+				y = current.y;
 			} else if (counter === 1) {
-				x = 1;
-				y = 0;
+				x = current.x + 1;
+				y = current.y;
 			} else if (counter === 2) {
-				x = 0;
-				y = -1;
+				x = current.x;
+				y = current.y - 1;
 			} else if (counter === 3) {
-				x = 0;
-				y = 1;
+				x = current.x;
+				y = current.y + 1;
 			}
-			var coordString = convertCoordToString(current.x + x, current.y + y);
-			var v = (current.x + x) * ROWS + (current.y + y);
-			if (bfsInfo[v].distance === null) {
-				if (board[current.x + x][current.y + y].value === 3) {
+
+			var v = x * COLS + y;
+			if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
+				if (bfsInfo[v].distance === null && board[x][y].value === 0) {
+					bfsInfo[v].distance = bfsInfo[u].distance + 1;
+					bfsInfo[v].x = current.x;
+					bfsInfo[v].y = current.y;
+
+					queue.enqueue(board[x][y]);
+					drawSearched(convertCoordToString(x, y));
+				} else if (board[x][y].value === 3) {
+					bfsInfo[v].x = current.x;
+					bfsInfo[v].y = current.y;
 					console.log("FOUND *******************");
+					retrace(bfsInfo, v);
 					return bfsInfo;
 				}
-				bfsInfo[v].distance = bfsInfo[u].distance + 1;
-				bfsInfo[v].predecessor = "right";
-				queue.enqueue(board[current.x + x][current.y + y]);
-				drawSearched(coordString);
 			}
 		}
 		if (!queue.isEmpty()) {
-			setTimeout(doSort, 0);
+			setTimeout(doBFSSort, 0);
 		}
 	})();
 
 	return bfsInfo;
 }
 
-function doBreadthFirst(board, startNode, searchValue) {
-	let queue = [];
-	let path = [];
-
-	queue.push(startNode);
-	let count = 0;
-	(function doSort() {
-		// while (queue.length > 0 && count < 102) {
-		let currentNode = queue[0];
-		let x = currentNode[0];
-		let y = currentNode[1];
-
-		path.push([x, y]);
-		var coordString = convertCoordToString(x, y);
-		console.log("Current node is: " + x + ", " + y);
-
-		if (board[x][y] === searchValue) {
-			console.log("Found It!");
-			//console.table(path);
-			return;
-		}
-
-		if (x + 1 <= ROWS) {
-			if (board[x + 1][y] != 4) {
-				board[x][y] = 4;
-				queue.push([x + 1, y]);
-				drawSearched(coordString);
-			}
-		}
-
-		if (x - 1 >= 0) {
-			if (board[x - 1][y] != 4) {
-				board[x][y] = 4;
-				queue.push([x - 1, y]);
-				drawSearched(coordString);
-			}
-		}
-
-		if (y + 1 <= COLS) {
-			if (board[x][y + 1] != 4) {
-				board[x][y] = 4;
-				queue.push([x, y + 1]);
-				drawSearched(coordString);
-			}
-		}
-
-		if (y - 1 >= 0) {
-			if (board[x][y - 1] != 4) {
-				board[x][y] = 4;
-				queue.push([x, y - 1]);
-				drawSearched(coordString);
-			}
-		}
-
-		queue.shift();
-		count++;
-		if (queue.length > 0 && count < 10000) {
-			setTimeout(doSort, 0);
-		}
-	})();
-
-	console.log("Sorry, no such node found :(");
+function retrace(bfsInfo, v) {
+	var current = bfsInfo[v];
+	while (current.distance != 1) {
+		var x = current.x;
+		var y = current.y;
+		current = bfsInfo[x * COLS + y];
+		drawPath(convertCoordToString(x, y));
+	}
 }

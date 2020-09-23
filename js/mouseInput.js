@@ -83,10 +83,19 @@ function toggleMazeBtn() {
 function clearBoard() {
 	$("#board td").removeClass("selected");
 	$("#board td").removeClass("searched");
+	$("#board td").removeClass("path");
+
 	$("#board td").removeClass("start");
 	$("#board td").removeClass("end");
 
 	resetBoard(true);
+	drawTable();
+}
+
+function clearPath() {
+	$("#board td").removeClass("searched");
+	$("#board td").removeClass("path");
+
 	drawTable();
 }
 /********** ___END Menu Input HELPER Functions___ ***********/

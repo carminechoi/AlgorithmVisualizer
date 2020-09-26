@@ -5,7 +5,7 @@ const allCells = $("#board td");
 const SX = 11;
 const SY = 8;
 const EX = 11;
-const EY = 15;
+const EY = 31;
 
 var Board = {
 	board: createBoard(),
@@ -32,10 +32,10 @@ function createBoard() {
 		for (var j = 0; j < COLS; j++) {
 			board[i][j] = {
 				value: 0,
-				distance: 0,
-				predecessor: null,
 				x: i,
 				y: j,
+				sourcex: null,
+				sourcey: null,
 			};
 		}
 	}

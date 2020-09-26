@@ -28,7 +28,15 @@ function doPrim() {
 
 	Board.board[Board.startX][Board.startY].value = 2;
 	Board.board[Board.endX][Board.endY].value = 3;
-	checkEndPoint(getRandom(0, 3));
+	var rand1 = 0;
+	var rand2 = 0;
+	while (rand1 == 0) {
+		rand1 = getRandom(-1, 1);
+	}
+	while (rand2 == 0) {
+		rand2 = getRandom(-1, 1);
+	}
+	checkEndPoint(rand1, rand2);
 
 	drawTable();
 }
@@ -57,12 +65,51 @@ function connectWall(wall) {
 function getRandom(starting, ending) {
 	return Math.floor(Math.random() * ending + starting);
 }
-function checkEndPoint(rand) {
+function checkEndPoint(randx, randy) {
 	var cell = Board.board[Board.endX][Board.endY];
 	var count = 0;
+	var value = 4;
 	var x = Board.endX;
 	var y = Board.endY;
-	console.log(getWallNeighbors(cell).length);
+	if (x == 0 && y == 0) {
+		value = 2;
+		if (randx == 1) {
+			randx = 0;
+			randy = 1;
+		} else {
+			randx = -1;
+			randy = 0;
+		}
+	} else if (x == 0 && y == COLS - 1) {
+		if (randx == 1) {
+			randx = 1;
+			randy = 0;
+		} else {
+			randx = 0;
+			randy = -1;
+		}
+		value = 2;
+	} else if (x == ROWS - 1 && y == 0) {
+		if (randx == 1) {
+			randx = -1;
+			randy = 0;
+		} else {
+			randx = 0;
+			randy = 1;
+		}
+		value = 2;
+	} else if (x == ROWS - 1 && y == COLS - 1) {
+		if (randx == 1) {
+			randx = 0;
+			randy = 1;
+		} else {
+			randx = -1;
+			randy = 0;
+		}
+		value = 2;
+	} else if (x == 0 || x == ROWS - 1 || y == 0 || y == COLS - 1) {
+		value = 3;
+	}
 	if (x >= 1) {
 		if (Board.board[x - 1][y].value === 1) {
 			count++;
@@ -83,8 +130,8 @@ function checkEndPoint(rand) {
 			count++;
 		}
 	}
-	if (count == 4) {
-		Board.board[cell.x + 1][cell.y].value = 0;
+	if (count == value) {
+		Board.board[cell.x + randx][cell.y + randy].value = 0;
 	}
 }
 function checkConnections(wall) {

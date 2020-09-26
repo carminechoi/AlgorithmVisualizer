@@ -11,8 +11,6 @@ Queue.prototype.isEmpty = function () {
 	return this.items.length === 0;
 };
 
-function doDijkstra() {}
-
 function doBFS(board, startX, startY, searchValue) {
 	clearPath();
 	var queue = new Queue();
@@ -39,7 +37,7 @@ function doBFS(board, startX, startY, searchValue) {
 		var current = queue.dequeue();
 		var u = current.x * COLS + current.y;
 
-		for (var counter = 0; counter <= 4; counter++) {
+		for (var counter = 0; counter < 4; counter++) {
 			var x, y;
 			if (counter === 0) {
 				x = current.x - 1;
@@ -54,6 +52,19 @@ function doBFS(board, startX, startY, searchValue) {
 				x = current.x;
 				y = current.y + 1;
 			}
+			// } else if (counter === 4) {
+			// 	x = current.x - 1;
+			// 	y = current.y - 1;
+			// } else if (counter === 5) {
+			// 	x = current.x + 1;
+			// 	y = current.y - 1;
+			// } else if (counter === 6) {
+			// 	x = current.x - 1;
+			// 	y = current.y + 1;
+			// } else if (counter === 7) {
+			// 	x = current.x + 1;
+			// 	y = current.y + 1;
+			// }
 
 			var v = x * COLS + y;
 			if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
@@ -64,7 +75,7 @@ function doBFS(board, startX, startY, searchValue) {
 
 					queue.enqueue(board[x][y]);
 					drawSearched(convertCoordToString(x, y));
-				} else if (board[x][y].value === 3) {
+				} else if (board[x][y].value === searchValue) {
 					bfsInfo[v].x = current.x;
 					bfsInfo[v].y = current.y;
 					console.log("FOUND *******************");

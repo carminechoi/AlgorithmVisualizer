@@ -1,9 +1,11 @@
 function doPrim() {
+	clearPath();
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			Board.board[i][j].value = 1;
 		}
 	}
+
 	Board.board[Board.startX][Board.startY].value = 2;
 	Board.board[Board.endX][Board.endY].value = 3;
 	var wallList = [];

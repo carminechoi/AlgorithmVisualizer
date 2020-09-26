@@ -95,7 +95,6 @@ function clearBoard() {
 function clearPath() {
 	$("#board td").removeClass("searched");
 	$("#board td").removeClass("path");
-
 	drawTable();
 }
 /********** ___END Menu Input HELPER Functions___ ***********/

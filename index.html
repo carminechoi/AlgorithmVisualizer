@@ -21,8 +21,8 @@
                 <div class="dropdown">
                     <button class="dropbtn" onclick="toggleAlgorithmBtn()">Algorithm <span class="transparent">&#x25BC;</span></button>
                     <div id="algorithm-btn" class="dropdown-content">
-                        <a href="#" onclick="doDijkstra()">Dijkstra's</a>
-                        <a href="#" onclick="doBFS(Board.board, Board.startX, Board.startY, 3)">Breadth-First Search</a>
+                        <a href="#" onclick="doDijkstras()">Dijkstra's</a>
+                        <a href="#" onclick="doBFS(currSX, currSY, 'end')">Breadth-First Search</a>
                         <a href="#">Depth-First Search</a>
                         <a href="#">Swarm</a>
                     </div>
@@ -31,16 +31,14 @@
                     <button onclick="toggleMazeBtn()" class="dropbtn">Maze <span class="transparent">&#x25BC;</span></button>
                     <div id="maze-btn" class="dropdown-content">
                         <a href="#" onclick="doPrim()">Prim's</a>
-                        <a href="#">Maze 2</a>
-                        <a href="#">Maze 3</a>
-                        <a href="#">Maze 4</a>
+
                     </div>
                 </div>
                 <div class="dropdown">
                     <button onclick="clearPath()" class="dropbtn">Clear Path</button>
                 </div>
                 <div class="dropdown">
-                    <button onclick="clearBoard()" class="dropbtn">Reset Board</button>
+                    <button onclick="resetBoard()" class="dropbtn">Reset Board</button>
                 </div>
             </div>            
         </div>
@@ -77,10 +75,19 @@
 		</tbody>
 	</table>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-	<script src="js/mouseInput.js"></script>
 	<script src="js/main.js"></script>
-	<script src="js/bfs.js"></script>
-	<script src="js/prim.js"></script>
+	<script src="js/events.js"></script>
+	<script src="js/naviBar.js"></script>
+	<script src="js/cell.js"></script>
+	<script src="js/board.js"></script>
+	<script src="js/helper.js"></script>
+	<!-- Solvers -->
+	<script src="js/solver/dijkstras.js"></script>
+	<script src="js/solver/bfs.js"></script>
+	<!-- Maze -->
+	<script src="js/maze/prim.js"></script>
+
+
 	
 </body>
 </html>

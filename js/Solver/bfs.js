@@ -11,7 +11,8 @@ Queue.prototype.isEmpty = function () {
 	return this.items.length === 0;
 };
 
-function doBFS(board, startX, startY, searchValue) {
+function doBFS(startX, startY, searchValue) {
+	console.log("IN BFS " + startX + " : " + startY + " : " + searchValue);
 	clearPath();
 	var queue = new Queue();
 	queue.enqueue(board[startX][startY]);
@@ -52,30 +53,19 @@ function doBFS(board, startX, startY, searchValue) {
 				x = current.x;
 				y = current.y + 1;
 			}
-			// } else if (counter === 4) {
-			// 	x = current.x - 1;
-			// 	y = current.y - 1;
-			// } else if (counter === 5) {
-			// 	x = current.x + 1;
-			// 	y = current.y - 1;
-			// } else if (counter === 6) {
-			// 	x = current.x - 1;
-			// 	y = current.y + 1;
-			// } else if (counter === 7) {
-			// 	x = current.x + 1;
-			// 	y = current.y + 1;
-			// }
 
 			var v = x * COLS + y;
 			if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
-				if (bfsInfo[v].distance === null && board[x][y].value === 0) {
+				console.log("IN HERE");
+
+				if (bfsInfo[v].distance === null && board[x][y].state === "empty") {
 					bfsInfo[v].distance = bfsInfo[u].distance + 1;
 					bfsInfo[v].x = current.x;
 					bfsInfo[v].y = current.y;
 
 					queue.enqueue(board[x][y]);
 					drawSearched(convertCoordToString(x, y));
-				} else if (board[x][y].value === searchValue) {
+				} else if (board[x][y].state === searchValue) {
 					bfsInfo[v].x = current.x;
 					bfsInfo[v].y = current.y;
 					console.log("FOUND *******************");

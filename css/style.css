@@ -47,7 +47,7 @@ header a {
 }
 
 header .transparent {
-	color: rgb(255, 255, 255, 0.2);
+	color: rgba(255, 255, 255, 0.253);
 }
 
 /* Menu Options */
@@ -162,8 +162,11 @@ header .transparent {
 #board td:hover {
 	background: #ececec;
 }
+#board td.empty {
+	background-color: var(--cell-empty-color);
+}
 
-#board td.selected {
+#board td.wall {
 	background-color: #355c7d;
 }
 

@@ -1,11 +1,19 @@
 function doPrim() {
-	var wallList = [];
+	var walls = [];
 
 	clearBoard();
 
-	drawWalls();
+	fillWalls();
+	drawBoard();
 
 	var firstCell = pickInitialCell();
+	walls = addToWallList(firstCell, walls);
+	while (walls.length != 0) {
+		var randomWallIndex = getRandom(0, walls.length - 1);
+		walls = checkWall(walls[randomWallIndex], walls);
+		walls.splice(randomWallIndex, 1);
+		drawBoard();
+	}
 }
 
 function getRandom(starting, ending) {
@@ -13,30 +21,101 @@ function getRandom(starting, ending) {
 }
 
 function pickInitialCell() {
-	var randX, randY;
-	while (randX != currSX && randX != currEX) {
+	var randX = currSX,
+		randY = currSY;
+	while (randX == currSX || randX == currEX) {
 		randX = getRandom(0, ROWS - 1);
 	}
-	while (randY != currSY && randY != currEY) {
+	while (randY == currSY || randY == currEY) {
 		randY = getRandom(0, COLS - 1);
 	}
 
 	return [randX, randY];
 }
 
-function drawWalls() {
+function addToWallList(cell, walls) {
+	var x = cell[0];
+	var y = cell[1];
+	if (x > 0 && x < ROWS) {
+		if (checkWallState(x - 1, y, "wall")) {
+			walls.push(board[x - 1][y]);
+		}
+		if (checkWallState(x + 1, y, "wall")) {
+			walls.push(board[x + 1][y]);
+		}
+	}
+	if (y > 0 && y < COLS) {
+		if (checkWallState(x, y - 1, "wall")) {
+			walls.push(board[x][y - 1]);
+		}
+		if (checkWallState(x, y + 1, "wall")) {
+			walls.push(board[x][y + 1]);
+		}
+	}
+
+	return walls;
+}
+
+function fillWalls() {
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
-			var coord = convertCoordToString(i, j);
-			if (board[i][j].state == "start") {
-				drawStart(coord);
-			} else if (board[i][j].state == "end") {
-				drawEnd(coord);
-			} else {
-				drawWall(coord);
+			if (board[i][j].state == "empty") {
+				updateBoard(i, j, "wall");
 			}
 		}
 	}
+}
+
+function checkWallState(x, y, state) {
+	if (board[x][y].state == state) {
+		return true;
+	} else {
+		return false;
+	}
+}
+
+function checkWall(wall, walls) {
+	var x = wall.x;
+	var y = wall.y;
+	var offsetX = 0,
+		offsetY = 0;
+	var emptyCount = 0;
+	if (x > 0 && x < ROWS) {
+		if (checkWallState(x - 1, y, "empty")) {
+			emptyCount += 1;
+			offsetX = 1;
+			offsetY = 0;
+		}
+		if (checkWallState(x + 1, y, "empty")) {
+			emptyCount += 1;
+			offsetX = -1;
+			offsetY = 0;
+		}
+	}
+	if (y > 0 && y < COLS) {
+		if (checkWallState(x, y - 1, "empty")) {
+			emptyCount += 1;
+			offsetX = 0;
+			offsetY = 1;
+		}
+		if (checkWallState(x, y + 1, "empty")) {
+			emptyCount += 1;
+			offsetX = 0;
+			offsetY = -1;
+		}
+	}
+
+	if (emptyCount < 2) {
+		x += offsetX;
+		y += offsetY;
+		updateBoard(x, y, "empty");
+		x += offsetX;
+		y += offsetY;
+		updateBoard(x, y, "empty");
+		walls = addToWallList(board[x][y], walls);
+	}
+
+	return walls;
 }
 
 // function doPrim() {

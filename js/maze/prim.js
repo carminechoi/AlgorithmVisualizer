@@ -1,11 +1,19 @@
 function doPrim() {
-	var wallList = [];
-
 	clearBoard();
+	drawWalls()
 
-	drawWalls();
-
+	var neighborList = [];
 	var firstCell = pickInitialCell();
+
+	board[firstCell[0]][firstCell[1]].state = "empty"
+	
+	addNeighborsToList(firstCell, neighborList)
+	for (var i = 0; i < neighborList.length; i++) {
+		console.log(neighborList[i].x + " : " + neighborList[i].y)
+	}
+
+	pickRandomNeighbor(neighborList)
+	
 }
 
 function getRandom(starting, ending) {
@@ -13,15 +21,35 @@ function getRandom(starting, ending) {
 }
 
 function pickInitialCell() {
-	var randX, randY;
-	while (randX != currSX && randX != currEX) {
+	var randX = currSX, randY = currSY;
+	while (randX == currSX || randX == currEX) {
 		randX = getRandom(0, ROWS - 1);
 	}
-	while (randY != currSY && randY != currEY) {
+	while (randY == currSY || randY == currEY) {
 		randY = getRandom(0, COLS - 1);
 	}
-
 	return [randX, randY];
+}
+
+function addNeighborsToList(cell, neighborList) {
+	var x = cell[0]
+	var y = cell[1]
+	if (board[x+2][y].state == "wall") {
+		neighborList.push(board[x+2][y])
+	}
+	if (board[x-2][y].state == "wall") {
+		neighborList.push(board[x-2][y])
+	}
+	if (board[x][y+2].state == "wall") {
+		neighborList.push(board[x][y+2])
+	}
+	if (board[x][y+2].state == "wall") {
+		neighborList.push(board[x][y-2])
+	}
+}
+
+function pickRandomNeighbor(neighborList) {
+
 }
 
 function drawWalls() {
@@ -33,8 +61,11 @@ function drawWalls() {
 			} else if (board[i][j].state == "end") {
 				drawEnd(coord);
 			} else {
+				board[i][j].state = "wall"
 				drawWall(coord);
 			}
+			//setTimeout(drawWalls, 0);
+			
 		}
 	}
 }

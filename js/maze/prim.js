@@ -5,15 +5,19 @@ function doPrim() {
 	var neighborList = [];
 	var firstCell = pickInitialCell();
 
-	board[firstCell[0]][firstCell[1]].state = "empty"
+	updateBoard(firstCell[0], firstCell[1], "empty")
 	
-	addNeighborsToList(firstCell, neighborList)
-	for (var i = 0; i < neighborList.length; i++) {
-		console.log(neighborList[i].x + " : " + neighborList[i].y)
-	}
+	neighborList = addNeighborsToList(firstCell, neighborList)
 
-	pickRandomNeighbor(neighborList)
-	
+	for (var i = 0; i < 20; i ++) {
+		var neighborInfo = pickRandomNeighbor(neighborList)
+		neighborList = neighborInfo.neighborList
+		var randomNeighbor = neighborInfo.randomNeighbor.neighbor
+		console.log("Chosen Neighbor: " + randomNeighbor.x + " : " + randomNeighbor.y)
+		neighborList = addNeighborsToList([randomNeighbor.x, randomNeighbor.y], neighborList)
+		updateBoard(randomNeighbor.x, randomNeighbor.y, "empty")
+		updateBoard(randomNeighbor.x - neighborInfo.randomNeighbor.fromX, randomNeighbor.y - neighborInfo.randomNeighbor.fromY, "empty")
+	}
 }
 
 function getRandom(starting, ending) {
@@ -31,25 +35,41 @@ function pickInitialCell() {
 	return [randX, randY];
 }
 
-function addNeighborsToList(cell, neighborList) {
+function addNeighborsToList(cell, nList) {
 	var x = cell[0]
 	var y = cell[1]
-	if (board[x+2][y].state == "wall") {
-		neighborList.push(board[x+2][y])
+	if (x >= 2) { 
+		if (board[x-2][y].state == "wall") {
+			nList.push({neighbor: board[x-2][y], fromX: -1, fromY:0})
+		}
 	}
-	if (board[x-2][y].state == "wall") {
-		neighborList.push(board[x-2][y])
+	if (x < ROWS-2) {
+		if (board[x+2][y].state == "wall") {
+			nList.push({neighbor: board[x+2][y], fromX: 1, fromY: 0})
+		}
 	}
-	if (board[x][y+2].state == "wall") {
-		neighborList.push(board[x][y+2])
+	if (y >= 2) {
+		if (board[x][y-2].state == "wall") {
+			nList.push({neighbor: board[x][y-2], fromX: 0, fromY: -1})
+		}
 	}
-	if (board[x][y+2].state == "wall") {
-		neighborList.push(board[x][y-2])
+	if (y < COLS-2) {
+		if (board[x][y+2].state == "wall") {
+			nList.push({neighbor: board[x][y+2], fromX: 0, fromY: 1})
+		}
 	}
+	return nList
 }
 
 function pickRandomNeighbor(neighborList) {
+	var randomNeighborIndex = getRandom(0, neighborList.length)
+	var randomNeighbor = neighborList[randomNeighborIndex]
+	neighborList.splice(randomNeighborIndex, 1)
 
+	return {
+		randomNeighbor: randomNeighbor,
+		neighborList: neighborList
+	}
 }
 
 function drawWalls() {

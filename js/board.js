@@ -22,9 +22,17 @@ function updateBoard(x, y, state) {
 		if (state == "start") {
 			currSX = x;
 			currSY = y;
+			drawStart(convertCoordToString(x,y))
 		} else if (state == "end") {
 			currEX = x;
 			currEY = y;
+			drawEnd(convertCoordToString(x,y))
+		} else if (state == "wall") {
+			drawWall(convertCoordToString(x,y))
+		} else if (state == "path") {
+			drawPath(convertCoordToString(x,y))
+		} else if (state == "empty") {
+			drawEmpty(convertCoordToString(x,y))
 		}
 	}
 }
@@ -62,16 +70,31 @@ function drawEnd(coordString) {
 }
 
 function drawSearched(coordString) {
+	$(coordString).removeClass("wall");
+	$(coordString).removeClass("empty");
+	$(coordString).removeClass("path");
 	$(coordString).addClass("searched");
 }
 
 function drawWall(coordString) {
+	$(coordString).removeClass("empty");
+	$(coordString).removeClass("searched");
+	$(coordString).removeClass("path");
 	$(coordString).addClass("wall");
 }
 
 function drawPath(coordString) {
+	$(coordString).removeClass("wall");
 	$(coordString).removeClass("searched");
+	$(coordString).removeClass("path");
 	$(coordString).addClass("path");
+}
+
+function drawEmpty(coordString) {
+	$(coordString).removeClass("wall");
+	$(coordString).removeClass("searched");
+	$(coordString).removeClass("path");
+	$(coordString).addClass("empty");
 }
 
 function drawBoard() {

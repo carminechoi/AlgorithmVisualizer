@@ -10,3 +10,9 @@ function convertCoordToString(x, y) {
 }
 
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
+
+function cellExists(cell, arr) {
+	return arr.some(function(el) {
+		return el.neighbor == cell;
+	});
+}

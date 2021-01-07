@@ -9,7 +9,7 @@ function doPrim() {
 	
 	neighborList = addNeighborsToList(firstCell, neighborList)
 
-	for (var i = 0; i < 20; i ++) {
+	while (neighborList.length > 0) {
 		var neighborInfo = pickRandomNeighbor(neighborList)
 		neighborList = neighborInfo.neighborList
 		var randomNeighbor = neighborInfo.randomNeighbor.neighbor
@@ -39,22 +39,26 @@ function addNeighborsToList(cell, nList) {
 	var x = cell[0]
 	var y = cell[1]
 	if (x >= 2) { 
-		if (board[x-2][y].state == "wall") {
+		var cellIsPresent = cellExists(board[x-2][y], nList);
+		if (board[x-2][y].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x-2][y], fromX: -1, fromY:0})
 		}
 	}
 	if (x < ROWS-2) {
-		if (board[x+2][y].state == "wall") {
+		var cellIsPresent = cellExists(board[x+2][y], nList);
+		if (board[x+2][y].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x+2][y], fromX: 1, fromY: 0})
 		}
 	}
 	if (y >= 2) {
-		if (board[x][y-2].state == "wall") {
+		var cellIsPresent = cellExists(board[x][y-2], nList);
+		if (board[x][y-2].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x][y-2], fromX: 0, fromY: -1})
 		}
 	}
 	if (y < COLS-2) {
-		if (board[x][y+2].state == "wall") {
+		var cellIsPresent = cellExists(board[x][y+2], nList);
+		if (board[x][y+2].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x][y+2], fromX: 0, fromY: 1})
 		}
 	}

@@ -16,3 +16,14 @@ function cellExists(cell, arr) {
 		return el.neighbor == cell;
 	});
 }
+
+function isStartOrEnd(x, y) {
+	if (x == currSX && y == currSY) {
+		return true
+	} else if (x == currEX && y == currEY) {
+		return true
+	} else {
+		return false
+	}
+
+}

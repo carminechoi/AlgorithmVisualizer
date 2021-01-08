@@ -15,8 +15,10 @@ function doPrim() {
 		var randomNeighbor = neighborInfo.randomNeighbor.neighbor
 		console.log("Chosen Neighbor: " + randomNeighbor.x + " : " + randomNeighbor.y)
 		neighborList = addNeighborsToList([randomNeighbor.x, randomNeighbor.y], neighborList)
-
-		updateBoard(randomNeighbor.x, randomNeighbor.y, "empty")
+		if (!isStartOrEnd(randomNeighbor.x, randomNeighbor.y)) {
+			updateBoard(randomNeighbor.x, randomNeighbor.y, "empty")
+		} 
+		
 		updateBoard(randomNeighbor.x - neighborInfo.randomNeighbor.fromX, randomNeighbor.y - neighborInfo.randomNeighbor.fromY, "empty")
 		
 		if (neighborList.length > 0) {

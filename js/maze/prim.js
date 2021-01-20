@@ -13,7 +13,6 @@ function doPrim() {
 		var neighborInfo = pickRandomNeighbor(neighborList)
 		neighborList = neighborInfo.neighborList
 		var randomNeighbor = neighborInfo.randomNeighbor.neighbor
-		console.log("Chosen Neighbor: " + randomNeighbor.x + " : " + randomNeighbor.y)
 		neighborList = addNeighborsToList([randomNeighbor.x, randomNeighbor.y], neighborList)
 		if (!isStartOrEnd(randomNeighbor.x, randomNeighbor.y)) {
 			updateBoard(randomNeighbor.x, randomNeighbor.y, "empty")
@@ -95,8 +94,6 @@ function drawWalls() {
 				board[i][j].state = "wall"
 				drawWall(coord);
 			}
-			//setTimeout(drawWalls, 0);
-			
 		}
 	}
 }

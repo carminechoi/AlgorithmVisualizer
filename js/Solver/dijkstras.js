@@ -1,67 +1,67 @@
 //PRIORITY QUEUE
 
-function minDistance(Q, dist) {
-	var minValue = 1000000000000000;
-	var index = null;
-	for (var i = 0; i < dist.length; i++) {
-		if (dist[i] < minValue) {
-			minValue = dist[i];
-			index = i;
-		}
-	}
-	return Q[index];
-}
-
 function doDijkstras() {
 	clearPath();
 
-	var Q = [];
-	var dist = [];
-	var prev = [];
-	for (row = 0; row < ROWS; row++) {
-		for (col = 0; col < COLS; col++) {
-			dist[row * COLS + col] = 1000;
-			prev[row * COLS + col] = null;
-			Q[row * COLS + col] = Board.board[row][col];
-		}
-	}
-	dist[Board.startX * COLS + Board.startY] = 0;
+	var notWalls = []
+	var dist = []
+	var prev = []
 
-	while (Q.length > 0) {
-		var u = minDistance(Q, dist);
-
-		// remove u from Q
-		var index = u.x * COLS + u.y;
-		Q.splice(index, 1);
-
-		for (var i = 0; i < 4; i++) {
-			var x = u.x;
-			var y = u.y;
-
-			if (i == 0) {
-				x += -1;
-			} else if (i == 1) {
-				x += 1;
-			} else if (i == 2) {
-				y += -1;
-			} else {
-				y += 1;
-			}
-			if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
-				console.log(x + " : " + y + " : ");
-
-				var v = Board.board[x][y];
-				if (Q.indexOf(x * COLS + y) != -1) {
-					var alt = dist[u.x * COLS + u.y] + 1;
-					if (alt < dist[v.x * COLS + v.y]) {
-						dist[v.x * COLS + v.y] = alt;
-						prev[v.x * COLS + v.y] = u;
-					}
-				}
+	for (var i = 0; i < ROWS; i++) {
+		for (var j = 0; j < COLS; j++) {
+			if (board[i][j].state != "wall") {
+				dist.push({x: i, y: j, dist: -1})
+				prev.push({x: i, y: j, prev: -1})
+				notWalls.push(board[i][j])
 			}
 		}
-		console.log("done");
 	}
 
-	console.log("DONE");
+	console.log("notWalls.length: " + notWalls.length)	
+	
+    while (notWalls.length > 1) {
+		console.log("inside while")
+		var minDistCell = findMinimumDistance(dist)
+
+		notWalls = removeElementFromArray(notWalls, minDistCell)
+
+		var neighbors = findEmptyNeighbors(minDistCell)
+		
+	}
+
+	console.log("end doDijkstras")
+}
+
+function findMinimumDistance(dist) {
+	var minDist = 100000
+	var minCell = board[SX][SY]
+	for (var i = 0; i < dist.length; i++) {
+		const currLength = dist[i].dist
+		if (currLength < minDist) {
+			minDist = currLength
+			minCell = board[dist[i].x][dist[i].y]
+		}
+	}
+	return minCell
+}
+
+function findEmptyNeighbors(origin) {
+	console.log("inside find empty neighbors")
+	const x = origin.x
+	const y = origin.y
+
+	var neighbors = []
+	if (x > 0 && board[x-1][y].state != "wall") {
+		neighbors.push(board[x-1][y])
+	}
+	if (x < ROWS && board[x+1][y].state != "wall") {
+		neighbors.push(board[x+1][y])
+	}
+	if (y > 0 && board[x][y-1].state != "wall") {
+		neighbors.push(board[x][y-1])
+	}
+	if (y < COLS && board[x][y+1].state != "wall") {
+		neighbors.push(board[x][y+1])
+	}
+	return neighbors
 }

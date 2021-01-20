@@ -12,7 +12,6 @@ Queue.prototype.isEmpty = function () {
 };
 
 function doBFS(startX, startY, searchValue) {
-	console.log("IN BFS " + startX + " : " + startY + " : " + searchValue);
 	clearPath();
 	var queue = new Queue();
 	queue.enqueue(board[startX][startY]);
@@ -56,7 +55,6 @@ function doBFS(startX, startY, searchValue) {
 
 			var v = x * COLS + y;
 			if (x >= 0 && x < ROWS && y >= 0 && y < COLS) {
-				console.log("IN HERE");
 
 				if (bfsInfo[v].distance === null && board[x][y].state === "empty") {
 					bfsInfo[v].distance = bfsInfo[u].distance + 1;
@@ -68,7 +66,6 @@ function doBFS(startX, startY, searchValue) {
 				} else if (board[x][y].state === searchValue) {
 					bfsInfo[v].x = current.x;
 					bfsInfo[v].y = current.y;
-					console.log("FOUND *******************");
 					retrace(bfsInfo, v);
 					return bfsInfo;
 				}

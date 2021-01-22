@@ -20,7 +20,6 @@ function doDijkstras() {
 	dist[findIndexOfWithAttr(dist, 'x', 'y', currSX, currSY)].dist = 0
 
     while (Q.length > 1) {
-		console.log("length: " + Q.length)
 		var minDistCell = findMinimumDistance(Q, dist)
 		Q = removeElementFromArray(Q, minDistCell)
 		if(minDistCell == board[currEX][currEY]) {
@@ -31,12 +30,13 @@ function doDijkstras() {
 		
 		// FOR EACH NEIGHBOR
 		for (var i = 0; i < neighbors.length; i++) {
-			var alt = dist[indexOfMinDistCell] + 1
+
+			var alt = dist[indexOfMinDistCell].dist + 1
 			var x = neighbors[i].x
 			var y = neighbors[i].y
 			var indexOfNeighbor = findIndexOfWithAttr(dist, 'x', 'y', x, y)
-			if (alt < dist[indexOfNeighbor]) {
-				dist[indexOfNeighbor] = alt
+			if (alt < dist[indexOfNeighbor].dist) {
+				dist[indexOfNeighbor].dist = alt
 				prev[indexOfNeighbor] = minDistCell
 			}
 		}
@@ -50,23 +50,19 @@ function doDijkstras() {
 }
 
 function findMinimumDistance(Q, dist) {
-	var minDist = 99999
-	var minCell = board[currSX][currSY]
+	var minDist = 100000
+	var minCell = board[currEX][currEY]
 	for (var i = 0; i < Q.length; i++) {
 		var x = Q[i].x
 		var y = Q[i].y
 		var indexToCheckMinimum = findIndexOfWithAttr(dist, 'x', 'y', x, y)
 		var distToCheck = dist[indexToCheckMinimum].dist
+
 		if (distToCheck < minDist) {
-			console.log("distance: " + distToCheck)
-			console.log("minimum distance: " + minDist)
 			minDist = distToCheck
 			minCell = board[x][y]
-			
-			console.log("x: " + x + "  ||  y: " + y)
 		}
 	}
-	console.log("end")
 	return minCell
 }
 

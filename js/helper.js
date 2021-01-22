@@ -12,7 +12,7 @@ function convertCoordToString(x, y) {
 const equals = (a, b) => a.length === b.length && a.every((v, i) => v === b[i]);
 
 // RETURN TRUE IF cell IS IN ARRAY arr
-function cellExists(cell, arr) {
+function cellExistsInArray(cell, arr) {
 	return arr.some(function(el) {
 		return el.neighbor == cell;
 	});
@@ -50,4 +50,13 @@ function removeElementFromArray(array, element) {
 	}
 
 	return array
+}
+
+function findIndexOfWithAttr(array, attr1, attr2, value1, value2) {
+	for(var i = 0; i < array.length; i++) {
+        if(array[i][attr1] === value1 && array[i][attr2] === value2) {
+            return i;
+        }
+    }
+    return -1;
 }

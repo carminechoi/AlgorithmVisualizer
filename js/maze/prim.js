@@ -45,25 +45,25 @@ function addNeighborsToList(cell, nList) {
 	var x = cell[0]
 	var y = cell[1]
 	if (x >= 2) { 
-		var cellIsPresent = cellExists(board[x-2][y], nList);
+		var cellIsPresent = cellExistsInArray(board[x-2][y], nList);
 		if (board[x-2][y].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x-2][y], fromX: -1, fromY:0})
 		}
 	}
 	if (x < ROWS-2) {
-		var cellIsPresent = cellExists(board[x+2][y], nList);
+		var cellIsPresent = cellExistsInArray(board[x+2][y], nList);
 		if (board[x+2][y].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x+2][y], fromX: 1, fromY: 0})
 		}
 	}
 	if (y >= 2) {
-		var cellIsPresent = cellExists(board[x][y-2], nList);
+		var cellIsPresent = cellExistsInArray(board[x][y-2], nList);
 		if (board[x][y-2].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x][y-2], fromX: 0, fromY: -1})
 		}
 	}
 	if (y < COLS-2) {
-		var cellIsPresent = cellExists(board[x][y+2], nList);
+		var cellIsPresent = cellExistsInArray(board[x][y+2], nList);
 		if (board[x][y+2].state == "wall" && !cellIsPresent) {
 			nList.push({neighbor: board[x][y+2], fromX: 0, fromY: 1})
 		}

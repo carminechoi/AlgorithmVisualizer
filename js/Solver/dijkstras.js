@@ -11,7 +11,7 @@ function doDijkstras() {
 		for (var j = 0; j < COLS; j++) {
 			if (board[i][j].state != "wall") {
 				dist.push({x: i, y: j, dist: 100000})
-				prev.push({x: i, y: j, prev: -1})
+				prev.push({x: i, y: j, prev: null})
 				Q.push(board[i][j])
 			}
 		}
@@ -37,7 +37,7 @@ function doDijkstras() {
 			var indexOfNeighbor = findIndexOfWithAttr(dist, 'x', 'y', x, y)
 			if (alt < dist[indexOfNeighbor].dist) {
 				dist[indexOfNeighbor].dist = alt
-				prev[indexOfNeighbor] = minDistCell
+				prev[indexOfNeighbor].prev = minDistCell
 			}
 		}
 	}
@@ -45,7 +45,14 @@ function doDijkstras() {
 	// REVERSE ITERATION
 	var S = []
 
-
+	var target = prev[findIndexOfWithAttr(prev, 'x', 'y', currEX, currEY)]
+	if (target.prev != null) {
+		while (target.prev != null) {
+			S.unshift(board[target.x][target.y])
+			target = prev[findIndexOfWithAttr(prev, 'x', 'y', target.prev.x, target.prev.y)]
+			console.log("x: " + target.x + " |  y: " + target.y)
+		}
+	}
 	console.log("end doDijkstras")
 }
 

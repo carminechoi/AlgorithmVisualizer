@@ -11,6 +11,8 @@ class LinkedList {
     {
         this.head = null;
         this.size = 0;
+        this.x = null
+        this.y = null
     }
 
     // ADDS ELEMENT TO END OF THE LIST

@@ -3,25 +3,28 @@
 function doDijkstras() {
 	clearPath();
 
-	var Q = []
+	var nodeQueue = []
 	var dist = []
 	var prev = []
 
+	// INITIALIZE Q, DIST, AND PREV 
 	for (var i = 0; i < ROWS; i++) {
 		for (var j = 0; j < COLS; j++) {
 			if (board[i][j].state != "wall") {
 				dist.push({x: i, y: j, dist: 100000})
 				prev.push({x: i, y: j, prev: null})
-				Q.push(board[i][j])
+				nodeQueue.push(board[i][j])
 			}
 		}
 	}
 	
+	// SET SOURCE DISTANCE TO ZERO
 	dist[findIndexOfWithAttr(dist, 'x', 'y', currSX, currSY)].dist = 0
 
-    while (Q.length > 1) {
-		var minDistCell = findMinimumDistance(Q, dist)
-		Q = removeElementFromArray(Q, minDistCell)
+	// WHILE NODES STILL EXIST
+    while (nodeQueue.length > 1) {
+		var minDistCell = findMinimumDistance(nodeQueue, dist)
+		nodeQueue = removeElementFromArray(nodeQueue, minDistCell)
 		if(minDistCell == board[currEX][currEY]) {
 			break
 		}
@@ -30,7 +33,6 @@ function doDijkstras() {
 		
 		// FOR EACH NEIGHBOR
 		for (var i = 0; i < neighbors.length; i++) {
-
 			var alt = dist[indexOfMinDistCell].dist + 1
 			var x = neighbors[i].x
 			var y = neighbors[i].y
@@ -38,6 +40,7 @@ function doDijkstras() {
 			if (alt < dist[indexOfNeighbor].dist) {
 				dist[indexOfNeighbor].dist = alt
 				prev[indexOfNeighbor].prev = minDistCell
+				drawSearched(convertCoordToString(x,y))
 			}
 		}
 	}
@@ -46,11 +49,13 @@ function doDijkstras() {
 	var S = []
 
 	var target = prev[findIndexOfWithAttr(prev, 'x', 'y', currEX, currEY)]
+	console.log(target)
 	if (target.prev != null) {
 		while (target.prev != null) {
+			drawPath(convertCoordToString(target.x, target.y))
 			S.unshift(board[target.x][target.y])
 			target = prev[findIndexOfWithAttr(prev, 'x', 'y', target.prev.x, target.prev.y)]
-			console.log("x: " + target.x + " |  y: " + target.y)
+			// console.log("x: " + target.x + " |  y: " + target.y)
 		}
 	}
 	console.log("end doDijkstras")

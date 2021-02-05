@@ -1,5 +1,5 @@
 function doPrim() {
-	resetBoard();
+	clearBoard();
 	drawWalls()
 
 	var neighborList = [];
@@ -17,9 +17,9 @@ function doPrim() {
 		if (!isStartOrEnd(randomNeighbor.x, randomNeighbor.y)) {
 			updateBoard(randomNeighbor.x, randomNeighbor.y, "empty")
 		} 
-		
-		updateBoard(randomNeighbor.x - neighborInfo.randomNeighbor.fromX, randomNeighbor.y - neighborInfo.randomNeighbor.fromY, "empty")
-		
+		if (!isStartOrEnd(randomNeighbor.x - neighborInfo.randomNeighbor.fromX, randomNeighbor.y - neighborInfo.randomNeighbor.fromY))
+			updateBoard(randomNeighbor.x - neighborInfo.randomNeighbor.fromX, randomNeighbor.y - neighborInfo.randomNeighbor.fromY, "empty");
+
 		if (neighborList.length > 0) {
 			setTimeout(doPrimSort, 0);
 		}

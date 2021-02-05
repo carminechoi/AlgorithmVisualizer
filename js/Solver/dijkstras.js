@@ -1,6 +1,6 @@
 //PRIORITY QUEUE
 
-function doDijkstras() {
+function dijkstras() {
 	clearPath();
 
 	var nodeQueue = []
@@ -21,30 +21,41 @@ function doDijkstras() {
 	// SET SOURCE DISTANCE TO ZERO
 	dist[findIndexOfWithAttr(dist, 'x', 'y', currSX, currSY)].dist = 0
 
-	// WHILE NODES STILL EXIST
-    while (nodeQueue.length > 1) {
+	var continueDijkstras = true;
+	
+	(function doDijkstras() {
+		// WHILE NODES STILL EXIST
 		var minDistCell = findMinimumDistance(nodeQueue, dist)
 		nodeQueue = removeElementFromArray(nodeQueue, minDistCell)
 		if(minDistCell == board[currEX][currEY]) {
-			break
-		}
-		var neighbors = findEmptyNeighbors(minDistCell)
-		var indexOfMinDistCell = findIndexOfWithAttr(dist, 'x', 'y', minDistCell.x, minDistCell.y)
-		
-		// FOR EACH NEIGHBOR
-		for (var i = 0; i < neighbors.length; i++) {
-			var alt = dist[indexOfMinDistCell].dist + 1
-			var x = neighbors[i].x
-			var y = neighbors[i].y
-			var indexOfNeighbor = findIndexOfWithAttr(dist, 'x', 'y', x, y)
-			if (alt < dist[indexOfNeighbor].dist) {
-				dist[indexOfNeighbor].dist = alt
-				prev[indexOfNeighbor].prev = minDistCell
-				drawSearched(convertCoordToString(x,y))
+			continueDijkstras = false
+			reverseIteration(prev)
+			return 0
+		} else {
+			var neighbors = findEmptyNeighbors(minDistCell)
+			var indexOfMinDistCell = findIndexOfWithAttr(dist, 'x', 'y', minDistCell.x, minDistCell.y)
+			
+			// FOR EACH NEIGHBOR
+			for (var i = 0; i < neighbors.length; i++) {
+				var alt = dist[indexOfMinDistCell].dist + 1
+				var x = neighbors[i].x
+				var y = neighbors[i].y
+				var indexOfNeighbor = findIndexOfWithAttr(dist, 'x', 'y', x, y)
+				if (alt < dist[indexOfNeighbor].dist) {
+					dist[indexOfNeighbor].dist = alt
+					prev[indexOfNeighbor].prev = minDistCell
+					if(x != currEX || y != currEY)
+						drawSearched(convertCoordToString(x,y));
+				}
 			}
 		}
-	}
-	
+		if (nodeQueue.length > 1 && continueDijkstras) {
+			setTimeout(doDijkstras, 0);
+		}
+	})();
+}
+
+function reverseIteration(prev) {
 	// REVERSE ITERATION
 	var S = []
 
@@ -52,10 +63,10 @@ function doDijkstras() {
 	console.log(target)
 	if (target.prev != null) {
 		while (target.prev != null) {
-			drawPath(convertCoordToString(target.x, target.y))
+			if(target.x != currEX || target.y != currEY)
+				drawPath(convertCoordToString(target.x, target.y));
 			S.unshift(board[target.x][target.y])
 			target = prev[findIndexOfWithAttr(prev, 'x', 'y', target.prev.x, target.prev.y)]
-			// console.log("x: " + target.x + " |  y: " + target.y)
 		}
 	}
 	console.log("end doDijkstras")

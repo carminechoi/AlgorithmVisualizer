@@ -22,17 +22,17 @@ function updateBoard(x, y, state) {
 		if (state == "start") {
 			currSX = x;
 			currSY = y;
-			drawStart(convertCoordToString(x,y))
+			drawStart(convertCoordToString(x, y));
 		} else if (state == "end") {
 			currEX = x;
 			currEY = y;
-			drawEnd(convertCoordToString(x,y))
+			drawEnd(convertCoordToString(x, y));
 		} else if (state == "wall") {
-			drawWall(convertCoordToString(x,y))
+			drawWall(convertCoordToString(x, y));
 		} else if (state == "path") {
-			drawPath(convertCoordToString(x,y))
+			drawPath(convertCoordToString(x, y));
 		} else if (state == "empty") {
-			drawEmpty(convertCoordToString(x,y))
+			drawEmpty(convertCoordToString(x, y));
 		}
 	}
 }
@@ -86,7 +86,7 @@ function drawWall(coordString) {
 function drawPath(coordString) {
 	$(coordString).removeClass("wall");
 	$(coordString).removeClass("searched");
-	$(coordString).removeClass("path");
+	// $(coordString).removeClass("path");
 	$(coordString).addClass("path");
 }
 

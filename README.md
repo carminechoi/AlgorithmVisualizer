@@ -1,7 +1,7 @@
 # Pathfinder - Maze Solver and Visualizer
 https://carminechoi.github.io/Pathfinder/
 
-![Pathfinder](pathfinder_screenshot.jpeg)
+![Pathfinder](pathfinder_screenshot.jpg)
 
 Pathfinder is a web based app that allows users to interactively create mazes, solve them using various algorithms, and visualize the process. The application is deployed on GitHub Pages, and it is built using HTML, JavaScript, and CSS.
 

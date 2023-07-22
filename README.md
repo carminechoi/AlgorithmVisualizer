@@ -20,7 +20,7 @@ Pathfinder is a web based app that allows users to interactively create mazes, s
 
 ## Introduction
 
-The Pathfinder project provides an interactive platform where users can create custom mazes or generate random mazes using Prim's algorithm. Users can then apply solving algorithms like Breadth-First Search (BFS) and Dijkstra's algorithm to find the shortest path from the start to the end of the maze. The visualization helps users understand how these algorithms work and how they navigate through the maze to find the optimal path.
+Pathfinder provides an interactive platform where users can create custom mazes or generate random mazes using Prim's algorithm. Users can then apply solving algorithms like Breadth-First Search (BFS) and Dijkstra's algorithm to find the shortest path from the start to the end of the maze. The visualization helps users understand how these algorithms work and how they navigate through the maze to find the optimal path.
 
 ## Features
 
@@ -61,7 +61,3 @@ Now you should be able to interact with the Pathfinder application locally.
 ## License
 
 The Pathfinder project is open-source and is licensed under the [MIT License](LICENSE).
-
----
-
-Feel free to explore and enjoy the fascinating world of mazes and pathfinding algorithms using Pathfinder! If you have any questions or issues, please don't hesitate to open an issue on the GitHub repository. Happy solving! 🚀

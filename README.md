@@ -1,5 +1,7 @@
 # Pathfinder - Maze Solver and Visualizer
-https://carminechoi.github.io/Pathfinder/
+
+Visit the live website: [carmine.choi.github.io/Pathfinder](https://carminechoi.github.io/Pathfinder/)
+
 
 ![Pathfinder](pathfinder_screenshot.jpg)
 
